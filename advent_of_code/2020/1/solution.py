@@ -1,3 +1,7 @@
+"""
+Solution for AoC 2020 Day 1
+https://adventofcode.com/2020/day/1
+"""
 from math import prod
 from typing import List
 
@@ -18,7 +22,7 @@ def two_number_sum(nums: List[int], target: int) -> List[int]:
             break
 
         seen.add(num)
-    
+
     return result
 
 

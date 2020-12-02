@@ -1,3 +1,7 @@
+"""
+Solution for AoC 2020 Day 2
+https://adventofcode.com/2020/day/2
+"""
 from typing import Dict, List
 
 
@@ -16,6 +20,9 @@ def parse_password_string(password: str) -> Dict:
 
 
 def by_character_count_validation(password: str) -> bool:
+    """
+    Check the occurrence count of the character in the password policy is within range.
+    """
     values = parse_password_string(password)
     start, end = values["start"], values["end"]
     character = values["character"]
@@ -24,7 +31,10 @@ def by_character_count_validation(password: str) -> bool:
 
 
 def by_character_position_validation(password: str) -> bool:
-    only_one_occurrence = lambda ch, s1, s2: s1 != s2 and (s1 == ch or s2 == ch)
+    """
+    Check the character occurs in a single position from the password policy.
+    """
+    only_one_occurrence = lambda ch, s1, s2: s1 != s2 and ch in (s1, s2)
 
     values = parse_password_string(password)
     first, second = values["start"] - 1, values["end"] - 1
