@@ -25,4 +25,3 @@ run:
 .PHONY: debug
 	@rm -f sample.txt && ln -s advent_of_code/$(YEAR)/$(DAY)/sample.txt sample.txt
 	@rm -f input.txt && ln -s advent_of_code/$(YEAR)/$(DAY)/input.txt input.txt
-	@ipdb advent_of_code/$(YEAR)/$(DAY)/solution.py
