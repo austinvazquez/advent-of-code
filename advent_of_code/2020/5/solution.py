@@ -53,8 +53,9 @@ def main():
     with open("input.txt") as handle:
         boarding_passes = [line.strip() for line in handle]
 
-    boarding_passes = list(map(transform_partition_into_coordinate, boarding_passes))
-    boarding_passes = list(map(get_seat_id_from, boarding_passes))
+    boarding_passes = list(
+        map(get_seat_id_from, map(transform_partition_into_coordinate, boarding_passes))
+    )
 
     print(f"Step 1: {max(boarding_passes)}")
     print(f"Step 2: {find_seat(boarding_passes)}")
