@@ -72,7 +72,9 @@ def main():
     count = sum([len(group) for group in list(map(questions_anyone_answered, groups))])
     print(f"Step 1: {count}")
 
-    count = sum([len(group) for group in list(map(questions_everyone_answered, groups))])
+    count = sum(
+        [len(group) for group in list(map(questions_everyone_answered, groups))]
+    )
     print(f"Step 2: {count}")
 
 
