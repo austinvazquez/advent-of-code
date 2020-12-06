@@ -5,6 +5,7 @@ DAY  ?= 0
 .PHONY: day
 day:
 	@mkdir -p advent_of_code/$(YEAR)/$(DAY)
+	@touch advent_of_code/$(YEAR)/$(DAY)/sample.txt
 	@touch advent_of_code/$(YEAR)/$(DAY)/input.txt
 	@cp advent_of_code/$(YEAR)/0/solution.py advent_of_code/$(YEAR)/$(DAY)/
 
