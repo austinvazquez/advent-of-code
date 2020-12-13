@@ -23,18 +23,13 @@ def main():
             bags[bag].append((_type, int(num)))
 
     def contains_shiny_gold_bag(bag):
-        return (
-            bag == "shiny gold" or 
-            any(
-                contains_shiny_gold_bag(subbag) 
-                for subbag, _ in bags[bag]
-            )
+        return bag == "shiny gold" or any(
+            contains_shiny_gold_bag(subbag) for subbag, _ in bags[bag]
         )
 
     def bags_contained(bag):
         return 1 + sum(
-            num_of_bags * bags_contained(subbag) 
-            for subbag, num_of_bags in bags[bag]
+            num_of_bags * bags_contained(subbag) for subbag, num_of_bags in bags[bag]
         )
 
     count = sum(contains_shiny_gold_bag(bag) for bag in bags) - 1
