@@ -1,5 +1,5 @@
 PROJ  = advent_of_code
-YEAR ?= 2020
+YEAR ?= 2021
 DAY  ?= 0
 
 .PHONY: day
