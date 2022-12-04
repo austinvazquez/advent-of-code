@@ -137,16 +137,14 @@ func ReadRounds(r io.Reader) ([]Round, error) {
 	return rounds, nil
 }
 
-func Map(array []Round, f func(Round) int) []int {
-	ints := make([]int, len(array))
-	for _, n := range array {
-		ints = append(ints, f(n))
-	}
-	return ints
-}
+func Reduce(array []Round, f func(Round) int) int {
+	accumulator := 0
 
-func Reduce(array []int, f func([]int) int) int {
-	return f(array)
+	for _, n := range array {
+		accumulator += f(n)
+	}
+
+	return accumulator
 }
 
 func main() {
@@ -165,14 +163,6 @@ func main() {
 		return r.ScoreFromSuggestedOutcome()
 	}
 
-	sum := func(scores []int) int {
-		total := 0
-		for _, score := range scores {
-			total += score
-		}
-		return total
-	}
-
-	fmt.Printf("Part 1: %d\n", Reduce(Map(rounds, scoreFromSuggestedMove), sum))
-	fmt.Printf("Part 2: %d\n", Reduce(Map(rounds, scoreFromSuggestedOutcome), sum))
+	fmt.Printf("Part 1: %d\n", Reduce(rounds, scoreFromSuggestedMove))
+	fmt.Printf("Part 2: %d\n", Reduce(rounds, scoreFromSuggestedOutcome))
 }
