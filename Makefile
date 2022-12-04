@@ -1,5 +1,5 @@
 PROJ  = advent_of_code
-YEAR ?= 2021
+YEAR ?= 2022
 DAY  ?= 0
 
 .PHONY: day
@@ -27,7 +27,7 @@ run:
 run-go:
 	@rm -f sample.txt && ln -s advent_of_code/$(YEAR)/$(DAY)/sample.txt sample.txt
 	@rm -f input.txt && ln -s advent_of_code/$(YEAR)/$(DAY)/input.txt input.txt
-	@go build advent_of_code/$(YEAR)/$(DAY)/solution.go
+	@go run advent_of_code/$(YEAR)/$(DAY)/solution.go
 
 .PHONY: debug
 	@rm -f sample.txt && ln -s advent_of_code/$(YEAR)/$(DAY)/sample.txt sample.txt
