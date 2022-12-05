@@ -75,25 +75,7 @@ func FindTopNCalorieCounts(nums []int, top int) []int {
 	return calories
 }
 
-func sample() {
-	handle, err := os.Open("sample.txt")
-	check(err)
-	defer handle.Close()
-
-	nums, err := ReadInts(handle)
-	check(err)
-
-	reflect := func(n int) int {
-		return n
-	}
-
-	fmt.Printf("Sample Part 1: %d\n", Reduce(FindTopNCalorieCounts(nums, 1), reflect))
-	fmt.Printf("Sample Part 2: %d\n", Reduce(FindTopNCalorieCounts(nums, 3), reflect))
-}
-
 func main() {
-	sample()
-
 	handle, err := os.Open("input.txt")
 	check(err)
 	defer handle.Close()
