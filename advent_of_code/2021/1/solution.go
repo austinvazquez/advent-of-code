@@ -36,9 +36,9 @@ func ReadInts(r io.Reader) ([]int, error) {
 
 func CountIncreasesWithSlidingWindow(ints []int, windowSize int) int {
 	/*
-		Complexity analysis:
-		Time: O(n)
-		Space: O(1)
+	   Complexity analysis:
+	   Time: O(n)
+	   Space: O(1)
 	*/
 	count := 0
 

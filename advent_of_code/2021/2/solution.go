@@ -46,11 +46,11 @@ func ReadInstructions(r io.Reader) ([]instruction, error) {
 
 type coordinate struct {
 	horizontal int
-	depth int
-	aim int
+	depth      int
+	aim        int
 }
 
-func ExecuteInstructions(instructions []instruction) (coordinate) {
+func ExecuteInstructions(instructions []instruction) coordinate {
 	location := coordinate{0, 0, 0}
 
 	for _, instruction := range instructions {
@@ -67,7 +67,7 @@ func ExecuteInstructions(instructions []instruction) (coordinate) {
 	return location
 }
 
-func ExecuteInstructionsWithAim(instructions []instruction) (coordinate) {
+func ExecuteInstructionsWithAim(instructions []instruction) coordinate {
 	location := coordinate{0, 0, 0}
 
 	for _, instruction := range instructions {

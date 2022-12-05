@@ -35,11 +35,21 @@ func ReadInts(r io.Reader) ([]int, error) {
 	return ints, scanner.Err()
 }
 
-func SumTopCarriedCalories(nums []int, top int) int {
+func Reduce(nums []int, f func(int) int) int {
+	accumulator := 0
+
+	for _, n := range nums {
+		accumulator += f(n)
+	}
+
+	return accumulator
+}
+
+func FindTopNCalorieCounts(nums []int, top int) []int {
 	/*
-		    Complexity analysis:
-			Time: O(n)
-			Space: O(1)
+	   Complexity analysis:
+	   Time: O(n)
+	   Space: O(1)
 	*/
 	calories := make([]int, top)
 
@@ -52,14 +62,6 @@ func SumTopCarriedCalories(nums []int, top int) int {
 		}
 	}
 
-	sum := func(nums []int) int {
-		total := 0
-		for _, n := range nums {
-			total += n
-		}
-		return total
-	}
-
 	calorieCount := 0
 	for _, num := range nums {
 		if num == 0 {
@@ -70,10 +72,28 @@ func SumTopCarriedCalories(nums []int, top int) int {
 		}
 	}
 
-	return sum(calories)
+	return calories
+}
+
+func sample() {
+	handle, err := os.Open("sample.txt")
+	check(err)
+	defer handle.Close()
+
+	nums, err := ReadInts(handle)
+	check(err)
+
+	reflect := func(n int) int {
+		return n
+	}
+
+	fmt.Printf("Sample Part 1: %d\n", Reduce(FindTopNCalorieCounts(nums, 1), reflect))
+	fmt.Printf("Sample Part 2: %d\n", Reduce(FindTopNCalorieCounts(nums, 3), reflect))
 }
 
 func main() {
+	sample()
+
 	handle, err := os.Open("input.txt")
 	check(err)
 	defer handle.Close()
@@ -81,6 +101,10 @@ func main() {
 	nums, err := ReadInts(handle)
 	check(err)
 
-	fmt.Printf("Part 1: %d\n", SumTopCarriedCalories(nums, 1))
-	fmt.Printf("Part 2: %d\n", SumTopCarriedCalories(nums, 3))
+	reflect := func(n int) int {
+		return n
+	}
+
+	fmt.Printf("Part 1: %d\n", Reduce(FindTopNCalorieCounts(nums, 1), reflect))
+	fmt.Printf("Part 2: %d\n", Reduce(FindTopNCalorieCounts(nums, 3), reflect))
 }
