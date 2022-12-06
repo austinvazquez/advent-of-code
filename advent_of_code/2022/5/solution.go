@@ -9,8 +9,8 @@ import (
 	"strings"
 )
 
-// Solution for AoC 2022 Day 0
-// https://adventofcode.com/2022/day/0
+// Solution for AoC 2022 Day 5
+// https://adventofcode.com/2022/day/5
 
 func check(err error) {
 	if err != nil {
