@@ -18,70 +18,57 @@ func check(err error) {
 	}
 }
 
-type FileEntry struct {
-	name        string
-	size        int
-	isDirectory bool
-	parent      *FileEntry
-	children    map[string]*FileEntry
+type Node struct {
+	name     string
+	size     int
+	parent   *Node
+	children map[string]*Node
 }
 
-type FileEntryOpt func(*FileEntry)
+func NewNode(name string, parent *Node) *Node {
+	self := &Node{
+		name:     name,
+		children: make(map[string]*Node),
+	}
+	if parent == nil {
+		parent = self
+	}
+	self.parent = parent
+	return self
+}
 
-func WithSize(size int) FileEntryOpt {
-	return func(entry *FileEntry) {
-		entry.size = size
+func (n *Node) AddLeaf(name string, size int) {
+	n.children[name] = &Node{
+		name:   name,
+		size:   size,
+		parent: n,
 	}
 }
 
-func WithChild(child *FileEntry) FileEntryOpt {
-	return func(entry *FileEntry) {
-		if entry.isDirectory {
-			entry.children[child.name] = entry
-		}
+func (n *Node) AddBranch(name string) {
+	n.children[name] = &Node{
+		name:     name,
+		parent:   n,
+		children: make(map[string]*Node),
 	}
 }
 
-func NewFileEntry(name string, isDirectory bool, parent *FileEntry, opts ...FileEntryOpt) *FileEntry {
-	entry := &FileEntry{
-		name:        name,
-		isDirectory: isDirectory,
-		parent:      parent,
-		children:    make(map[string]*FileEntry),
-	}
-
-	for _, opt := range opts {
-		opt(entry)
-	}
-
-	return entry
-}
-
-func (f *FileEntry) AddFile(name string, size int) {
-	f.children[name] = &FileEntry{name: name, size: size, parent: f}
-}
-
-func (f *FileEntry) AddDirectory(name string) {
-	f.children[name] = &FileEntry{
-		name:        name,
-		isDirectory: true,
-		parent:      f,
-		children:    make(map[string]*FileEntry),
-	}
-}
-
-func (f *FileEntry) Size() int {
-	if f.isDirectory {
+func (n *Node) Size() int {
+	if n.IsBranch() {
 		var size int
-		for _, v := range f.children {
+		for _, v := range n.children {
 			size += v.Size()
 		}
 		return size
 	}
-	return f.size
+	return n.size
 }
 
-func ReadFilesystem(r io.Reader) *FileEntry {
+func (n *Node) IsBranch() bool {
+	return n.children != nil && len(n.children) > 0
+}
+
+func ReadFilesystem(r io.Reader) *Node {
 	scanner := bufio.NewScanner(r)
 	scanner.Split(bufio.ScanLines)
 
@@ -90,24 +77,22 @@ func ReadFilesystem(r io.Reader) *FileEntry {
 		lines = append(lines, scanner.Text())
 	}
 
-	var root *FileEntry
-	var currentDirectory *FileEntry
+	var root *Node
+	var currentDirectory *Node
 
 	for i := 0; i < len(lines); {
 		line := lines[i]
 
 		if strings.Contains(line, "cd ..") {
-			if currentDirectory.parent != nil {
-				currentDirectory = currentDirectory.parent
-			}
+			currentDirectory = currentDirectory.parent
 			i++
 		} else if strings.Contains(line, "cd") {
 			fields := strings.Fields(line)
 			name := fields[2]
 
-			var entry *FileEntry
+			var entry *Node
 			if root == nil {
-				root = NewFileEntry(name, true, currentDirectory)
+				root = NewNode(name, currentDirectory)
 				entry = root
 			} else {
 				entry = currentDirectory.children[name]
@@ -122,12 +107,12 @@ func ReadFilesystem(r io.Reader) *FileEntry {
 				name := fields[1]
 
 				if strings.Contains(line, "dir") {
-					entry.AddDirectory(name)
+					entry.AddBranch(name)
 				} else {
 					size, err := strconv.Atoi(fields[0])
 					check(err)
 
-					entry.AddFile(name, size)
+					entry.AddLeaf(name, size)
 				}
 
 				i += 1
@@ -145,30 +130,33 @@ func ReadFilesystem(r io.Reader) *FileEntry {
 	return root
 }
 
-func Traverse(root *FileEntry) []*FileEntry {
-	nodes := []*FileEntry{root}
+func Traverse(root *Node) []*Node {
+	nodes := []*Node{root}
 
 	for _, v := range root.children {
-		if v.isDirectory {
+		if v.IsBranch() {
 			nodes = append(nodes, Traverse(v)...)
 		} else {
 			nodes = append(nodes, v)
 		}
 	}
+
 	return nodes
 }
 
-func Filter(array []*FileEntry, f func(*FileEntry) bool) []*FileEntry {
-	var filtered []*FileEntry
+func Filter(array []*Node, f func(*Node) bool) []*Node {
+	var filtered []*Node
+
 	for _, n := range array {
 		if f(n) {
 			filtered = append(filtered, n)
 		}
 	}
+
 	return filtered
 }
 
-func Reduce(array []*FileEntry, f func(*FileEntry) int) int {
+func Reduce(array []*Node, f func(*Node) int) int {
 	accumulator := 0
 
 	for _, n := range array {
@@ -178,7 +166,7 @@ func Reduce(array []*FileEntry, f func(*FileEntry) int) int {
 	return accumulator
 }
 
-func Min(array []*FileEntry, f func(*FileEntry) int) int {
+func Min(array []*Node, f func(*Node) int) int {
 	min := f(array[0])
 
 	for i := 1; i < len(array); i++ {
@@ -197,19 +185,19 @@ func main() {
 
 	root := ReadFilesystem(handle)
 
-	atMost := func(size int) func(*FileEntry) bool {
-		return func(entry *FileEntry) bool {
-			return entry.isDirectory && entry.Size() < size
+	atMost := func(size int) func(*Node) bool {
+		return func(entry *Node) bool {
+			return entry.IsBranch() && entry.Size() < size
 		}
 	}
 
-	atLeast := func(size int) func(*FileEntry) bool {
-		return func(entry *FileEntry) bool {
-			return entry.isDirectory && entry.Size() >= size
+	atLeast := func(size int) func(*Node) bool {
+		return func(entry *Node) bool {
+			return entry.IsBranch() && entry.Size() >= size
 		}
 	}
 
-	size := func(entry *FileEntry) int {
+	size := func(entry *Node) int {
 		return entry.Size()
 	}
 
