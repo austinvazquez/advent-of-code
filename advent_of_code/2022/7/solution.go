@@ -201,8 +201,9 @@ func main() {
 		return entry.Size()
 	}
 
+	fmt.Printf("Part 1: %d\n", Reduce(Filter(Traverse(root), atMost(100000)), size))
+
 	usedSpace := root.Size()
 	freeSpace := 70000000 - usedSpace
-	fmt.Printf("Part 1: %d\n", Reduce(Filter(Traverse(root), atMost(100000)), size))
 	fmt.Printf("Part 2: %d\n", Min(Filter(Traverse(root), atLeast(30000000-freeSpace)), size))
 }
