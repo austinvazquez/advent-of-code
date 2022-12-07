@@ -23,17 +23,10 @@ func ReadByteSteam(r io.Reader) []rune {
 	return []rune(scanner.Text())
 }
 
-func DistanceToFirstMarker(datastream []rune, markerLength int) int {
-	markerIsValid := func(marker []rune) bool {
-		set := map[rune]struct{}{}
-		for _, r := range marker {
-			set[r] = struct{}{}
-		}
-		return len(set) == len(marker)
-	}
+func DistanceToFirstMarker(datastream []rune, markerLength int, isValid func([]rune) bool) int {
 	for i := 0; i < len(datastream)-markerLength; i++ {
 		marker := datastream[i : i+markerLength]
-		if markerIsValid(marker) {
+		if isValid(marker) {
 			return i + markerLength
 		}
 	}
@@ -47,6 +40,14 @@ func main() {
 
 	datastream := ReadByteSteam(handle)
 
-	fmt.Printf("Part 1: %d\n", DistanceToFirstMarker(datastream, 4))
-	fmt.Printf("Part 2: %d\n", DistanceToFirstMarker(datastream, 14))
+	markerValidationFunction := func(marker []rune) bool {
+		set := map[rune]struct{}{}
+		for _, r := range marker {
+			set[r] = struct{}{}
+		}
+		return len(set) == len(marker)
+	}
+
+	fmt.Printf("Part 1: %d\n", DistanceToFirstMarker(datastream, 4, markerValidationFunction))
+	fmt.Printf("Part 2: %d\n", DistanceToFirstMarker(datastream, 14, markerValidationFunction))
 }
