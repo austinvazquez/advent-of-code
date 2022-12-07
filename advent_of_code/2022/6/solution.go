@@ -1,7 +1,7 @@
 package main
 
-// Solution for AoC 2022 Day 0
-// https://adventofcode.com/2022/day/0
+// Solution for AoC 2022 Day 6
+// https://adventofcode.com/2022/day/6
 
 import (
 	"bufio"
