@@ -21,13 +21,13 @@ def compute_number_of_houses(directions, increment=1) -> int:
         last_house = path[-increment]
 
         if step == "^":
-            path.append((last_house[0], last_house[1]+1))
+            path.append((last_house[0], last_house[1] + 1))
         elif step == ">":
-            path.append((last_house[0]+1, last_house[1]))
+            path.append((last_house[0] + 1, last_house[1]))
         elif step == "<":
-            path.append((last_house[0]-1, last_house[1]))
+            path.append((last_house[0] - 1, last_house[1]))
         else:
-            path.append((last_house[0], last_house[1]-1))
+            path.append((last_house[0], last_house[1] - 1))
 
     return len(set(path))
 

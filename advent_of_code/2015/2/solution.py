@@ -8,7 +8,9 @@ def main():
     boxes = []
 
     with open("input.txt") as handle:
-        boxes = [list(map(lambda ch: int(ch), line.strip().split('x'))) for line in handle]
+        boxes = [
+            list(map(lambda ch: int(ch), line.strip().split("x"))) for line in handle
+        ]
 
     print(f"Step 1: {sum(map(compute_surface_area, boxes))}")
     print(f"Step 2: {sum(map(compute_ribbon_length, boxes))}")
