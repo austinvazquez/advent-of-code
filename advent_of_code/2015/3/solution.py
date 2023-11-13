@@ -1,5 +1,5 @@
 """
-Solution for AoC 2020 Day 0
+Solution for AoC 2020 Day 3
 https://adventofcode.com/2015/day/3
 """
 

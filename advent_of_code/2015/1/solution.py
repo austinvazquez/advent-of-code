@@ -1,5 +1,5 @@
 """
-Solution for AoC 2021 Day 0
+Solution for AoC 2021 Day 1
 https://adventofcode.com/2015/day/1
 """
 
