@@ -1,5 +1,5 @@
 """
-Solution for AoC 2020 Day 5
+Solution for AoC 2015 Day 5
 https://adventofcode.com/2015/day/5
 """
 from re import compile

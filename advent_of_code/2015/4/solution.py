@@ -1,5 +1,5 @@
 """
-Solution for AoC 2020 Day 4
+Solution for AoC 2015 Day 4
 https://adventofcode.com/2015/day/4
 """
 from hashlib import md5
