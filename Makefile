@@ -1,6 +1,11 @@
 PROJ  = advent_of_code
-YEAR ?= 2022
+YEAR ?= 2023
 DAY  ?= 0
+
+.PHONY: YEAR
+year:
+	@mkdir -p advent_of_code/$(YEAR)/0
+	@cp advent_of_code/2022/0/solution.* advent_of_code/$(YEAR)/0
 
 .PHONY: day
 day:

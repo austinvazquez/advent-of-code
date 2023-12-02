@@ -133,3 +133,7 @@ input.txt
 sample.txt
 
 solution
+
+# Added by cargo
+
+/target
