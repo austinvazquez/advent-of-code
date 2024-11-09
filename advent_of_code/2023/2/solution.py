@@ -2,8 +2,6 @@
 Solution for AoC 2023 Day 2
 https://adventofcode.com/2023/day/2
 """
-from collections import Counter
-from functools import reduce
 from math import prod
 
 

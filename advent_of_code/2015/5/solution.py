@@ -23,16 +23,16 @@ def is_nice_strict(string: str) -> bool:
 
         for v in "aeiou":
             vowel_count += string.count(v)
-        
+
         return vowel_count >= 3
 
     def contains_double_letter(string: str) -> bool:
         for i in range(len(string) - 1):
-            if string[i] == string[i+1]:
+            if string[i] == string[i + 1]:
                 return True
 
         return False
-    
+
     def does_not_contain_excluded_strings(string: str) -> bool:
         excluded_strings = ["ab", "cd", "pq", "xy"]
 
@@ -42,15 +42,21 @@ def is_nice_strict(string: str) -> bool:
 
         return True
 
-    return contains_three_vowels(string) and contains_double_letter(string) and does_not_contain_excluded_strings(string)
+    return (
+        contains_three_vowels(string)
+        and contains_double_letter(string)
+        and does_not_contain_excluded_strings(string)
+    )
 
 
 def is_nice_leniant(string: str) -> bool:
     pair_regex = compile(r"([a-z]{2}).*\1")
+
     def contains_pair_letters(string: str) -> bool:
         return pair_regex.search(string) != None
 
     xox_regex = compile(r"([a-z]{1})([a-z]{1})\1")
+
     def contains_xox(string: str) -> bool:
         return xox_regex.search(string) != None
 

@@ -25,14 +25,18 @@ def filter_numbers(numbers: List[str], inverse: bool = False) -> List[str]:
         if inverse:
             numbers = list(
                 filter(
-                    lambda n: n[i] == "0" if col.count("1") >= col.count("0") else n[i] == "1",
+                    lambda n: n[i] == "0"
+                    if col.count("1") >= col.count("0")
+                    else n[i] == "1",
                     numbers,
                 )
             )
         else:
             numbers = list(
                 filter(
-                    lambda n: n[i] == "1" if col.count("1") >= col.count("0") else n[i] == "0",
+                    lambda n: n[i] == "1"
+                    if col.count("1") >= col.count("0")
+                    else n[i] == "0",
                     numbers,
                 )
             )
